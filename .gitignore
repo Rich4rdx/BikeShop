@@ -1,0 +1,21 @@
+
+node_modules/
+
+
+dist/
+.angular/
+
+# Environment (optional - comenta estas líneas si quieres subir los environments)
+# src/environments/environment.prod.ts
+
+
+.vscode/
+.idea/
+
+
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

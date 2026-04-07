@@ -1,0 +1,188 @@
+// =============================================
+// BIKESHOP GLOBAL STYLES
+// =============================================
+
+@use '@angular/material' as mat;
+
+// ¡IMPORTANTE! Esto es lo que falta para que los menús floten correctamente
+@include mat.core();
+
+// Custom Orange Theme
+$bikeshop-primary: mat.define-palette((
+  50: #fff3e0,
+  100: #ffe0b2,
+  200: #ffcc80,
+  300: #ffb74d,
+  400: #ffa726,
+  500: #ff6b00,
+  600: #fb8c00,
+  700: #f57c00,
+  800: #ef6c00,
+  900: #e65100,
+  A100: #ffd180,
+  A200: #ffab40,
+  A400: #ff9100,
+  A700: #ff6d00,
+  contrast: (
+    50: #000, 100: #000, 200: #000, 300: #000, 400: #000,
+    500: #fff, 600: #fff, 700: #fff, 800: #fff, 900: #fff,
+    A100: #000, A200: #000, A400: #000, A700: #000,
+  )
+), 500);
+
+$bikeshop-accent: mat.define-palette(mat.$green-palette, 500);
+$bikeshop-warn: mat.define-palette(mat.$red-palette);
+
+$bikeshop-theme: mat.define-light-theme((
+  color: (
+    primary: $bikeshop-primary,
+    accent: $bikeshop-accent,
+    warn: $bikeshop-warn,
+  ),
+  typography: mat.define-typography-config(
+    $font-family: 'Inter, sans-serif',
+  ),
+  density: 0 // Ajuste para que no se vea todo tan apretado
+));
+
+// Aplicar el tema a todos los componentes
+@include mat.all-component-themes($bikeshop-theme);
+
+// Corregir la posición de los menús (CDK Overlays)
+.cdk-overlay-container {
+  z-index: 10000 !important;
+}
+
+// =============================================
+// CSS VARIABLES
+// =============================================
+:root {
+  --primary: #FF6B00;
+  --primary-light: #ff8c3a;
+  --primary-dark: #e55e00;
+  --accent-green: #4CAF50;
+  --bg-gray: #f5f5f5;
+  --bg-white: #ffffff;
+  --text-dark: #1a1a1a;
+  --text-medium: #555555;
+  --text-light: #888888;
+  --border-color: #e0e0e0;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
+  --shadow-hover: 0 4px 16px rgba(0,0,0,0.12);
+  --radius: 12px;
+  --radius-sm: 8px;
+}
+
+// =============================================
+// BASE RESET
+// =============================================
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-gray);
+  color: var(--text-dark);
+}
+
+// =============================================
+// UTILITY CLASSES
+// =============================================
+.page-container {
+  padding: 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.page-header {
+  margin-bottom: 28px;
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+  }
+  p {
+    font-size: 14px;
+    color: var(--text-light);
+    margin: 0;
+  }
+}
+
+.card {
+  background: var(--bg-white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.split-layout {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 24px;
+  align-items: start;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// =============================================
+// BADGE COLORS
+// =============================================
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+
+  &.badge-montana { background: #e8f5e9; color: #2e7d32; }
+  &.badge-ruta { background: #e3f2fd; color: #1565c0; }
+  &.badge-urbana { background: #f3e5f5; color: #6a1b9a; }
+}
+
+// =============================================
+// BUTTONS
+// =============================================
+.btn-primary {
+  background-color: var(--primary) !important;
+  color: white !important;
+  border: none;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  padding: 12px 24px !important;
+  cursor: pointer;
+
+  &:hover { background-color: var(--primary-dark) !important; }
+  &:disabled { background-color: #ccc !important; cursor: not-allowed; }
+}
+
+// =============================================
+// MATERIAL OVERRIDES
+// =============================================
+.mat-mdc-form-field {
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.mat-mdc-snack-bar-container {
+  &.success-snack {
+    --mdc-snackbar-container-color: #4CAF50;
+    --mdc-snackbar-supporting-text-color: white;
+  }
+  &.error-snack {
+    --mdc-snackbar-container-color: #f44336;
+    --mdc-snackbar-supporting-text-color: white;
+  }
+}
+
+// Scrollbar
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f1f1; }
+::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }

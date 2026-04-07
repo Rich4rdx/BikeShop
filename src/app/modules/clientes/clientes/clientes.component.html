@@ -1,0 +1,129 @@
+<div class="page-container">
+  <div class="page-header-row">
+    <div class="page-header">
+      <h1>Directorio de Clientes</h1>
+      <p>Gestiona tus clientes y su historial de compras</p>
+    </div>
+    <button mat-raised-button class="btn-primary"
+            (click)="mostrandoFormulario = !mostrandoFormulario">
+      <mat-icon>{{ mostrandoFormulario ? 'close' : 'add' }}</mat-icon>
+      {{ mostrandoFormulario ? 'Cancelar' : 'Nuevo Cliente' }}
+    </button>
+  </div>
+
+  <!-- Formulario nuevo cliente -->
+  <div class="card nuevo-cliente-card" *ngIf="mostrandoFormulario">
+    <h3 class="form-title">
+      <mat-icon>person_add</mat-icon> Registrar Nuevo Cliente
+    </h3>
+    <form [formGroup]="form" (ngSubmit)="registrar()" class="form-grid">
+      <mat-form-field appearance="outline">
+        <mat-label>Documento</mat-label>
+        <input matInput formControlName="documento" placeholder="Número de documento">
+        <mat-error>Documento requerido (máx. 20 caracteres)</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre completo</mat-label>
+        <input matInput formControlName="nombre" placeholder="Nombre del cliente">
+        <mat-error>Nombre requerido</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Teléfono</mat-label>
+        <input matInput formControlName="telefono" placeholder="Número de teléfono">
+        <mat-error>Teléfono requerido</mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button class="btn-primary" type="submit" [disabled]="form.invalid">
+        <mat-icon>save</mat-icon> Guardar Cliente
+      </button>
+    </form>
+  </div>
+
+  <!-- Split layout -->
+  <div class="split-layout">
+    <!-- Lista clientes -->
+    <div class="card clientes-panel">
+      <h3 class="panel-label">Buscar Cliente</h3>
+      <mat-form-field appearance="outline" class="search-full">
+        <mat-label>Nombre o documento...</mat-label>
+        <input matInput [(ngModel)]="busqueda" (input)="filtrar()"
+               placeholder="Buscar...">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <div class="clientes-list">
+        <div class="cliente-item"
+             *ngFor="let c of clientesFiltrados"
+             [class.selected]="clienteSeleccionado?.documento === c.documento"
+             (click)="seleccionarCliente(c)">
+          <div class="avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="cliente-info">
+            <span class="nombre">{{ c.nombre }}</span>
+            <span class="meta">
+              <mat-icon>description</mat-icon> {{ c.documento }}
+            </span>
+            <span class="meta">
+              <mat-icon>phone</mat-icon> {{ c.telefono }}
+            </span>
+          </div>
+        </div>
+
+        <div *ngIf="clientesFiltrados.length === 0" class="empty-list">
+          <mat-icon>person_search</mat-icon>
+          <p>No se encontraron clientes</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Historial compras -->
+    <div class="card historial-panel">
+      <h3 class="panel-label">
+        <mat-icon>shopping_bag</mat-icon> Historial de Compras
+      </h3>
+
+      <div *ngIf="!clienteSeleccionado" class="historial-empty">
+        <mat-icon>point_of_sale</mat-icon>
+        <p>Selecciona un cliente para ver su historial</p>
+        <span>Haz clic en una tarjeta de cliente</span>
+      </div>
+
+      <div *ngIf="clienteSeleccionado">
+        <div class="cliente-selected-header">
+          <div class="avatar large">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div>
+            <h4>{{ clienteSeleccionado.nombre }}</h4>
+            <p>{{ clienteSeleccionado.documento }} · {{ clienteSeleccionado.telefono }}</p>
+          </div>
+        </div>
+
+        <div *ngIf="ventasCliente.length === 0" class="historial-empty small">
+          <mat-icon>receipt_long</mat-icon>
+          <p>Sin compras registradas</p>
+        </div>
+
+        <div class="ventas-list" *ngIf="ventasCliente.length > 0">
+          <div class="venta-item" *ngFor="let v of ventasCliente">
+            <div class="venta-header">
+              <span class="venta-id">Venta #{{ v.idVenta }}</span>
+              <span class="venta-fecha">{{ formatFecha(v.fecha) }}</span>
+            </div>
+            <div class="venta-detalles">
+              <span *ngFor="let d of v.detalles" class="detalle-tag">
+                {{ d.marcaBicicleta }} {{ d.modeloBicicleta }} x{{ d.cantidad }}
+              </span>
+            </div>
+            <div class="venta-total">
+              Total: <strong>{{ formatPrice(v.total) }}</strong>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

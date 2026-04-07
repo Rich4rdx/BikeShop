@@ -1,0 +1,111 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Gestión de Proveedores</h1>
+    <p>Registra y administra tus proveedores de bicicletas</p>
+  </div>
+
+  <div class="split-layout">
+    <!-- FORM -->
+    <div class="card form-panel">
+      <h3 class="form-title">
+        <mat-icon>add_circle</mat-icon> Registrar Proveedor
+      </h3>
+      <p class="form-subtitle">Agrega un nuevo proveedor al sistema</p>
+
+      <form [formGroup]="form" (ngSubmit)="registrar()">
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre / Razón Social</mat-label>
+          <input matInput formControlName="nombre" placeholder="Distribuidora BikeWorld">
+          <mat-error>Nombre requerido (mín. 2 caracteres)</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>NIT / Documento</mat-label>
+          <input matInput formControlName="nit" placeholder="900123456-7">
+          <mat-error>NIT requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" placeholder="6012345678">
+          <mat-icon matSuffix>phone</mat-icon>
+          <mat-error>Teléfono requerido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" placeholder="ventas@proveedor.com" type="email">
+          <mat-icon matSuffix>email</mat-icon>
+          <mat-error>Email inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Dirección</mat-label>
+          <input matInput formControlName="direccion" placeholder="Calle 123 #45-67, Ciudad">
+          <mat-icon matSuffix>place</mat-icon>
+          <mat-error>Dirección requerida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Ciudad</mat-label>
+          <input matInput formControlName="ciudad" placeholder="Bogotá">
+          <mat-error>Ciudad requerida</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button class="btn-submit"
+                type="submit" [disabled]="form.invalid">
+          <mat-icon>add</mat-icon>
+          Registrar Proveedor
+        </button>
+      </form>
+    </div>
+
+    <!-- LIST -->
+    <div class="card list-panel">
+      <div class="list-header">
+        <h3 class="form-title">
+          <mat-icon>local_shipping</mat-icon> Proveedores Registrados
+        </h3>
+        <span class="count-badge">{{ proveedores.length }} proveedores</span>
+      </div>
+
+      <div *ngIf="cargando" class="loading">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+
+      <div class="proveedores-list" *ngIf="!cargando">
+        <div class="proveedor-item" *ngFor="let p of proveedores">
+          <div class="proveedor-top">
+            <div>
+              <h4>{{ p.nombre }}</h4>
+              <p class="nit-text">NIT: {{ p.nit }}</p>
+            </div>
+            <button mat-icon-button class="delete-btn"
+                    (click)="eliminar(p.nit)"
+                    matTooltip="Eliminar proveedor">
+              <mat-icon>delete_outline</mat-icon>
+            </button>
+          </div>
+
+          <div class="proveedor-contact">
+            <div class="contact-row">
+              <mat-icon>phone</mat-icon>
+              <span>{{ p.telefono }}</span>
+              <mat-icon class="ml">email</mat-icon>
+              <span>{{ p.email }}</span>
+            </div>
+            <div class="contact-row">
+              <mat-icon>place</mat-icon>
+              <span>{{ p.direccion }}, {{ p.ciudad }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="proveedores && proveedores?.length === 0" class="empty-state">
+          <mat-icon>local_shipping</mat-icon>
+          <p>No hay proveedores registrados</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

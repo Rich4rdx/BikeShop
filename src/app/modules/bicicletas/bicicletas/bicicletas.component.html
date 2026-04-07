@@ -1,0 +1,120 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Gestión de Bicicletas</h1>
+    <p>Registra y administra el inventario de bicicletas</p>
+  </div>
+
+  <div class="split-layout">
+    <div class="card form-panel">
+      <h3 class="form-title">
+        <mat-icon>add_circle</mat-icon> Registrar Bicicleta
+      </h3>
+      
+      <form [formGroup]="form" (ngSubmit)="registrar()">
+        
+        <div class="image-upload">
+          <div class="image-preview" *ngIf="imagenPreview">
+            <img [src]="imagenPreview" alt="Vista previa">
+            <button mat-icon-button class="remove-img" (click)="quitarImagen()" type="button">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+
+          <div class="upload-placeholder" *ngIf="!imagenPreview" (click)="fileInput.click()">
+            <mat-icon>add_photo_alternate</mat-icon>
+            <span>Agregar foto de la bicicleta</span>
+            <small>JPG, PNG — máx. 2 MB</small>
+          </div>
+
+          <input #fileInput type="file" accept="image/*" hidden (change)="onImagenSeleccionada($event)">
+        </div>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Marca</mat-label>
+          <input matInput formControlName="marca" placeholder="Trek, Giant, etc.">
+          <mat-error>La marca es obligatoria</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Modelo</mat-label>
+          <input matInput formControlName="modelo" placeholder="X-Caliber 8">
+          <mat-error>El modelo es obligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo</mat-label>
+          <mat-select formControlName="tipo">
+            <mat-option *ngFor="let t of tipos" [value]="t">{{ t }}</mat-option>
+          </mat-select>
+          <mat-error>Selecciona un tipo</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Proveedor</mat-label>
+          <mat-select formControlName="nitProveedor">
+            <mat-option *ngFor="let p of proveedores" [value]="p.nit">
+              {{ p.nombre }} ({{ p.nit }})
+            </mat-option>
+          </mat-select>
+          <mat-error>Selecciona un proveedor</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Precio (COP)</mat-label>
+          <input matInput formControlName="precio" type="number" placeholder="2500000">
+          <mat-icon matSuffix>attach_money</mat-icon>
+          <mat-error>Precio inválido</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Stock Inicial</mat-label>
+          <input matInput formControlName="cantidadInventario" type="number" placeholder="10">
+          <mat-error>Cantidad inválida</mat-error>
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" class="btn-submit" type="submit" [disabled]="form.invalid">
+          <mat-icon>save</mat-icon> Registrar Bicicleta
+        </button>
+      </form>
+    </div>
+
+    <div class="card inventory-panel">
+      <div class="inventory-header">
+        <h3 class="form-title">
+          <mat-icon>directions_bike</mat-icon> Inventario Actual
+        </h3>
+        <span class="inventory-count" *ngIf="bicicletas">{{ bicicletas.length }} bicicletas</span>
+      </div>
+
+      <div *ngIf="cargando" class="loading-center">
+        <mat-spinner diameter="36"></mat-spinner>
+      </div>
+
+      <div class="inventory-list" *ngIf="!cargando">
+        <div class="inventory-item" *ngFor="let b of bicicletas">
+          <div class="item-img">
+            <img *ngIf="b.imagenBase64" [src]="b.imagenBase64" [alt]="b.modelo">
+            <mat-icon *ngIf="!b.imagenBase64">directions_bike</mat-icon>
+          </div>
+          <div class="item-info">
+            <div class="item-top">
+              <h4>{{ b.modelo }}</h4>
+              <span class="badge" [ngClass]="getBadgeClass(b.tipo)">{{ b.tipo }}</span>
+            </div>
+            <p class="item-marca">{{ b.marca }}</p>
+            <p class="item-meta">NIT Proveedor: {{ b.nitProveedor }}</p>
+          </div>
+          <div class="item-right">
+            <span class="item-price">{{ formatPrice(b.precio) }}</span>
+            <span class="item-stock">Stock: {{ b.cantidadInventario }}</span>
+          </div>
+        </div>
+
+        <div *ngIf="bicicletas.length === 0" class="empty-state">
+          <mat-icon>inventory_2</mat-icon>
+          <p>No hay bicicletas registradas</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

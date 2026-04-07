@@ -1,0 +1,36 @@
+<nav class="navbar">
+  <!-- Brand -->
+  <div class="brand" (click)="navigate('/ventas')">
+    <div class="brand-logo">
+      <mat-icon>directions_bike</mat-icon>
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">BikeShop</span>
+      <span class="brand-sub">Tienda Física</span>
+    </div>
+  </div>
+
+  <!-- Nav Items -->
+  <div class="nav-items">
+    <button
+      *ngFor="let item of navItems"
+      class="nav-btn"
+      [class.active]="isActive(item.route)"
+      (click)="navigate(item.route)"
+      mat-button>
+      <mat-icon>{{ item.icon }}</mat-icon>
+      {{ item.label }}
+    </button>
+  </div>
+
+  <!-- User -->
+  <div class="nav-user">
+    <div class="user-info">
+      <span class="user-name">{{ username }}</span>
+      <span class="user-email">ameliohernandez&#64;Gmail.com</span>
+    </div>
+    <button mat-icon-button class="logout-btn" (click)="logout()" matTooltip="Cerrar sesión">
+      <mat-icon>logout</mat-icon>
+    </button>
+  </div>
+</nav>

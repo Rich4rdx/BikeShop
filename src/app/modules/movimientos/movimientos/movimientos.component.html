@@ -1,0 +1,85 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Reporte de Movimientos</h1>
+    <p>Auditoría de entradas y salidas de inventario</p>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card entradas">
+      <div class="kpi-top">
+        <span class="kpi-label">Total Entradas</span>
+        <mat-icon class="kpi-icon">add_circle</mat-icon>
+      </div>
+      <span class="kpi-num entradas-num">{{ totalEntradas }}</span>
+      <span class="kpi-sub">Unidades ingresadas</span>
+    </div>
+
+    <div class="kpi-card salidas">
+      <div class="kpi-top">
+        <span class="kpi-label">Total Salidas</span>
+        <mat-icon class="kpi-icon">remove_circle</mat-icon>
+      </div>
+      <span class="kpi-num salidas-num">{{ totalSalidas }}</span>
+      <span class="kpi-sub">Unidades vendidas</span>
+    </div>
+
+    <div class="kpi-card balance">
+      <div class="kpi-top">
+        <span class="kpi-label">Balance</span>
+        <mat-icon class="kpi-icon">filter_list</mat-icon>
+      </div>
+      <span class="kpi-num">{{ balance }}</span>
+      <span class="kpi-sub">Diferencia neta</span>
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="timeline-card card">
+    <div class="timeline-header">
+      <h3>Historial de Movimientos</h3>
+      <div class="filter-row">
+        <mat-icon>filter_list</mat-icon>
+        <select [(ngModel)]="filtro" (change)="aplicarFiltro()" class="filter-select">
+          <option>Todos</option>
+          <option>Entrada</option>
+          <option>Salida</option>
+        </select>
+      </div>
+    </div>
+
+    <div *ngIf="cargando" class="loading">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div class="timeline" *ngIf="!cargando">
+      <div class="timeline-item" *ngFor="let m of movimientosFiltrados">
+        <div class="timeline-dot" [class.entrada]="m.tipo === 'ENTRADA'" [class.salida]="m.tipo === 'SALIDA'">
+          <mat-icon>{{ m.tipo === 'ENTRADA' ? 'add' : 'remove' }}</mat-icon>
+        </div>
+        <div class="timeline-content">
+          <div class="timeline-main">
+            <div class="timeline-info">
+              <span class="movimiento-badge" [class.entrada-badge]="m.tipo === 'ENTRADA'" [class.salida-badge]="m.tipo === 'SALIDA'">
+                {{ m.tipo === 'ENTRADA' ? 'Entrada' : 'Salida' }}
+              </span>
+              <span class="bike-code">#{{ m.codigoBicicleta }}</span>
+              <p class="bike-modelo">{{ m.modeloBicicleta }}</p>
+            </div>
+            <div class="timeline-right">
+              <span class="cantidad" [class.positivo]="m.tipo === 'ENTRADA'" [class.negativo]="m.tipo === 'SALIDA'">
+                {{ m.tipo === 'ENTRADA' ? '+' : '-' }}{{ m.cantidad }}
+              </span>
+              <span class="fecha">{{ formatFecha(m.fecha) }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="movimientosFiltrados.length === 0" class="empty-state">
+        <mat-icon>inbox</mat-icon>
+        <p>No hay movimientos registrados</p>
+      </div>
+    </div>
+  </div>
+</div>

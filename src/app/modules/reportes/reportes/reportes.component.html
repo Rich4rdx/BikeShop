@@ -1,0 +1,158 @@
+<div class="page-container">
+  <div class="page-header">
+    <div>
+      <h1>Reportes de Ventas</h1>
+      <p>Filtra por período y descarga en PDF o Excel</p>
+    </div>
+  </div>
+
+  <!-- Filtro de fechas -->
+  <div class="card filtro-card">
+    <div class="filtro-row">
+      <div class="filtro-group">
+        <label>Desde</label>
+        <input type="date" [(ngModel)]="fechaInicio" class="date-input">
+      </div>
+      <div class="filtro-group">
+        <label>Hasta</label>
+        <input type="date" [(ngModel)]="fechaFin" class="date-input">
+      </div>
+      <button class="btn-generar" (click)="generarReporte()" [disabled]="cargando">
+        <mat-icon>search</mat-icon>
+        {{ cargando ? 'Cargando...' : 'Generar Reporte' }}
+      </button>
+    </div>
+    <div class="descarga-row" *ngIf="reporte">
+      <button class="btn-pdf" (click)="descargarPdf()" [disabled]="descargando === 'pdf'">
+        <mat-icon>picture_as_pdf</mat-icon>
+        {{ descargando === 'pdf' ? 'Generando...' : 'Descargar PDF' }}
+      </button>
+      <button class="btn-excel" (click)="descargarExcel()" [disabled]="descargando === 'excel'">
+        <mat-icon>table_view</mat-icon>
+        {{ descargando === 'excel' ? 'Generando...' : 'Descargar Excel' }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="cargando" class="loading-center">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <ng-container *ngIf="!cargando && reporte">
+
+    <!-- KPI Cards -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-top">
+          <span class="kpi-label">Total Ventas</span>
+          <mat-icon class="kpi-icon">receipt_long</mat-icon>
+        </div>
+        <span class="kpi-num">{{ reporte.totalVentas }}</span>
+        <span class="kpi-sub">Transacciones en el período</span>
+      </div>
+      <div class="kpi-card ingresos">
+        <div class="kpi-top">
+          <span class="kpi-label">Ingresos Totales</span>
+          <mat-icon class="kpi-icon">attach_money</mat-icon>
+        </div>
+        <span class="kpi-num ingresos-num">{{ formatPrice(reporte.totalIngresos) }}</span>
+        <span class="kpi-sub">Suma de todas las ventas</span>
+      </div>
+      <div class="kpi-card promedio">
+        <div class="kpi-top">
+          <span class="kpi-label">Ticket Promedio</span>
+          <mat-icon class="kpi-icon">trending_up</mat-icon>
+        </div>
+        <span class="kpi-num promedio-num">{{ formatPrice(reporte.promedioPorVenta) }}</span>
+        <span class="kpi-sub">Promedio por venta</span>
+      </div>
+      <div class="kpi-card cliente">
+        <div class="kpi-top">
+          <span class="kpi-label">Cliente Frecuente</span>
+          <mat-icon class="kpi-icon">star</mat-icon>
+        </div>
+        <span class="kpi-num cliente-num">{{ reporte.clienteFrecuente }}</span>
+        <span class="kpi-sub">{{ reporte.comprasClienteFrecuente }} compra(s) en el período</span>
+      </div>
+    </div>
+
+    <div class="reports-grid">
+      <!-- Top bicicletas -->
+      <div class="card report-card">
+        <h3 class="report-title">
+          <mat-icon>directions_bike</mat-icon> Top 5 Bicicletas Más Vendidas
+        </h3>
+        <div *ngIf="reporte.topBicicletas.length === 0" class="empty-state">
+          <mat-icon>inbox</mat-icon><p>Sin datos</p>
+        </div>
+        <table class="report-table" *ngIf="reporte.topBicicletas.length > 0">
+          <thead><tr>
+            <th>#</th><th>Marca</th><th>Modelo</th><th>Unidades</th><th>Ingresos</th>
+          </tr></thead>
+          <tbody>
+            <tr *ngFor="let b of reporte.topBicicletas; let i = index">
+              <td><span class="rank">{{ i + 1 }}</span></td>
+              <td>{{ b.marca }}</td>
+              <td><strong>{{ b.modelo }}</strong></td>
+              <td><span class="badge-qty">{{ b.cantidadVendida }}</span></td>
+              <td class="ingreso-cell">{{ formatPrice(b.ingresosTotales) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Ventas por día -->
+      <div class="card report-card">
+        <h3 class="report-title">
+          <mat-icon>calendar_today</mat-icon> Ventas por Día
+        </h3>
+        <div *ngIf="reporte.ventasPorDia.length === 0" class="empty-state">
+          <mat-icon>inbox</mat-icon><p>Sin datos</p>
+        </div>
+        <table class="report-table" *ngIf="reporte.ventasPorDia.length > 0">
+          <thead><tr>
+            <th>Fecha</th><th>Nº Ventas</th><th>Total del Día</th>
+          </tr></thead>
+          <tbody>
+            <tr *ngFor="let d of reporte.ventasPorDia">
+              <td class="fecha-cell">{{ formatFecha(d.fecha) }}</td>
+              <td class="items-cell"><span class="badge-qty">{{ d.cantidadVentas }}</span></td>
+              <td class="ingreso-cell">{{ formatPrice(d.totalDia) }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Ventas recientes -->
+    <div class="card report-card full-width">
+      <h3 class="report-title">
+        <mat-icon>history</mat-icon> Últimas Ventas del Período
+      </h3>
+      <div *ngIf="reporte.ventasRecientes.length === 0" class="empty-state">
+        <mat-icon>inbox</mat-icon><p>Sin ventas en este período</p>
+      </div>
+      <table class="report-table" *ngIf="reporte.ventasRecientes.length > 0">
+        <thead><tr>
+          <th># Venta</th><th>Cliente</th><th>Documento</th><th>Items</th><th>Total</th><th>Fecha</th>
+        </tr></thead>
+        <tbody>
+          <tr *ngFor="let v of reporte.ventasRecientes">
+            <td><span class="venta-id">#{{ v.idVenta }}</span></td>
+            <td>{{ v.cliente }}</td>
+            <td>{{ v.documentoCliente }}</td>
+            <td class="items-cell">{{ v.detalles?.length ?? 0 }}</td>
+            <td class="ingreso-cell">{{ formatPrice(v.total) }}</td>
+            <td class="fecha-cell">{{ formatFecha(v.fecha) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </ng-container>
+
+  <div *ngIf="!cargando && !reporte" class="empty-state main-empty">
+    <mat-icon>bar_chart</mat-icon>
+    <p>Selecciona un período y haz clic en "Generar Reporte"</p>
+  </div>
+</div>

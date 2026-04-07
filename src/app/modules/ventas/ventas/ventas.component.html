@@ -1,0 +1,162 @@
+<div class="ventas-layout">
+
+  <!-- ===== LEFT PANEL: Cliente + Carrito ===== -->
+  <div class="left-panel">
+
+    <!-- Cliente -->
+    <div class="panel-section">
+      <h3 class="section-title">
+        <mat-icon>person</mat-icon> Cliente
+      </h3>
+
+      <div *ngIf="!cliente; else clienteInfo">
+        <div class="search-row">
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Buscar por documento...</mat-label>
+            <input matInput [(ngModel)]="busquedaDoc"
+                   (keyup.enter)="buscarCliente()"
+                   placeholder="Número de documento">
+          </mat-form-field>
+          <button mat-icon-button class="search-btn" (click)="buscarCliente()"
+                  [disabled]="buscandoCliente">
+            <mat-icon>{{ buscandoCliente ? 'hourglass_empty' : 'search' }}</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <ng-template #clienteInfo>
+        <div class="cliente-card">
+          <div class="cliente-avatar">
+            <mat-icon>person</mat-icon>
+          </div>
+          <div class="cliente-data">
+            <span class="cliente-nombre">{{ cliente!.nombre }}</span>
+            <span class="cliente-doc">Doc: {{ cliente!.documento }}</span>
+            <span class="cliente-tel">
+              <mat-icon>phone</mat-icon> {{ cliente!.telefono }}
+            </span>
+          </div>
+          <button mat-icon-button (click)="limpiarCliente()" class="clear-btn">
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Carrito -->
+    <div class="panel-section cart-section">
+      <h3 class="section-title">
+        <mat-icon>shopping_cart</mat-icon>
+        Carrito ({{ carrito.length }} {{ carrito.length === 1 ? 'item' : 'items' }})
+      </h3>
+
+      <div *ngIf="carrito.length === 0" class="cart-empty">
+        <mat-icon class="empty-icon">shopping_cart</mat-icon>
+        <p>El carrito está vacío</p>
+        <span>Agrega bicicletas para comenzar</span>
+      </div>
+
+      <div class="cart-items" *ngIf="carrito.length > 0">
+        <div class="cart-item" *ngFor="let item of carrito">
+          <div class="cart-item-img">
+            <img *ngIf="item.bicicleta.imagenBase64"
+                 [src]="item.bicicleta.imagenBase64" alt="bici">
+            <mat-icon *ngIf="!item.bicicleta.imagenBase64">directions_bike</mat-icon>
+          </div>
+          <div class="cart-item-info">
+            <span class="item-modelo">{{ item.bicicleta.modelo }}</span>
+            <span class="item-precio">{{ formatPrice(item.bicicleta.precio) }}</span>
+          </div>
+          <div class="cart-item-qty">
+            <button mat-icon-button (click)="cambiarCantidad(item, -1)">
+              <mat-icon>remove</mat-icon>
+            </button>
+            <span>{{ item.cantidad }}</span>
+            <button mat-icon-button (click)="cambiarCantidad(item, 1)">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+          <span class="item-subtotal">{{ formatPrice(item.subtotal) }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="cart-footer">
+      <div class="total-row">
+        <span>Total:</span>
+        <span class="total-amount">{{ formatPrice(total) }}</span>
+      </div>
+      <button mat-raised-button class="btn-completar"
+              [disabled]="!puedeComprar"
+              (click)="completarVenta()">
+        <mat-icon>check_circle</mat-icon>
+        {{ procesando ? 'Procesando...' : 'Completar Venta' }}
+      </button>
+      <p class="cart-hint" *ngIf="!cliente">Selecciona un cliente para continuar</p>
+    </div>
+  </div>
+
+  <!-- ===== RIGHT PANEL: Catálogo Bicicletas ===== -->
+  <div class="right-panel">
+    <!-- Búsqueda -->
+    <div class="catalog-search">
+      <mat-icon class="search-icon">search</mat-icon>
+      <input [(ngModel)]="busquedaBike"
+             (input)="filtrarBicicletas()"
+             placeholder="Buscar bicicletas por modelo, marca o código..."
+             class="catalog-input">
+    </div>
+
+    <!-- Grid de bicicletas -->
+    <div class="bikes-grid">
+      <div class="bike-card" *ngFor="let bici of bicicletasFiltradas"
+           (click)="agregarAlCarrito(bici)"
+           [class.no-stock]="bici.cantidadInventario === 0">
+
+        <!-- Imagen -->
+        <div class="bike-image">
+          <img *ngIf="bici.imagenBase64" [src]="bici.imagenBase64" [alt]="bici.modelo">
+          <mat-icon *ngIf="!bici.imagenBase64" class="bike-placeholder-icon">directions_bike</mat-icon>
+        </div>
+
+        <div class="bike-header">
+          <div>
+            <h4 class="bike-modelo">{{ bici.modelo }}</h4>
+            <p class="bike-marca">{{ bici.marca }}</p>
+          </div>
+          <span class="badge" [ngClass]="getBadgeClass(bici.tipo)">{{ bici.tipo }}</span>
+        </div>
+
+        <div class="bike-details">
+          <div class="detail-row">
+            <span class="detail-label">Código</span>
+            <span class="detail-val">{{ bici.codigo }}</span>
+          </div>
+          <div class="detail-row">
+            <span class="detail-label">Stock</span>
+            <span class="detail-val stock"
+                  [class.low]="bici.cantidadInventario <= 2">
+              {{ bici.cantidadInventario }} unidades
+            </span>
+          </div>
+        </div>
+
+        <div class="bike-price">
+          <span class="price-label">Precio</span>
+          <span class="price-val">{{ formatPrice(bici.precio) }}</span>
+        </div>
+
+        <div class="add-overlay">
+          <mat-icon>add_shopping_cart</mat-icon>
+          <span>Agregar</span>
+        </div>
+      </div>
+
+      <div *ngIf="bicicletasFiltradas.length === 0" class="no-results">
+        <mat-icon>search_off</mat-icon>
+        <p>No se encontraron bicicletas</p>
+      </div>
+    </div>
+  </div>
+</div>
