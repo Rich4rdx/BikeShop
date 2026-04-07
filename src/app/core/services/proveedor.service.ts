@@ -5,7 +5,7 @@ import {
   ProveedorRequest, ProveedorResponse,
   HistorialComprasRequest, HistorialComprasResponse
 } from '../models/proveedor.model';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ProveedorService {
