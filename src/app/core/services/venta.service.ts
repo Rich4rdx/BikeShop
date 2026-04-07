@@ -21,4 +21,8 @@ export class VentaService {
   obtenerPorId(id: number): Observable<VentaResponse> {
     return this.http.get<VentaResponse>(`${this.API}/${id}`);
   }
+
+  listarPorCliente(documento: string): Observable<VentaResponse[]> {
+    return this.http.get<VentaResponse[]>(`${this.API}/cliente/${documento}`);
+  }
 }

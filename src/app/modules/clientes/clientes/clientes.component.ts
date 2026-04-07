@@ -66,9 +66,12 @@ export class ClientesComponent implements OnInit {
   }
 
   cargarVentasCliente(documento: string): void {
-    this.ventaService.listar().subscribe({
+    this.ventaService.listarPorCliente(documento).subscribe({
       next: (ventas) => {
-        this.ventasCliente = ventas.filter(v => v.documentoCliente === documento);
+        this.ventasCliente = ventas;
+      },
+      error: () => {
+        this.ventasCliente = [];
       }
     });
   }
