@@ -186,3 +186,19 @@ html, body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: #f1f1f1; }
 ::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+
+// =============================================
+// PRINT — solo mostrar la factura
+// =============================================
+@media print {
+  body > app-root > * {
+    display: none !important;
+  }
+
+  app-factura {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    z-index: 9999 !important;
+  }
+}
