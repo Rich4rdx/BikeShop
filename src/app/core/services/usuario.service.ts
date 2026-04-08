@@ -18,4 +18,8 @@ export class UsuarioService {
   ventasPorUsuario(id: number): Observable<VentaResponse[]> {
     return this.http.get<VentaResponse[]>(`${this.API}/${id}/ventas`);
   }
+
+  crear(dto: { username: string; password: string; nombre: string; rol: string }): Observable<string> {
+    return this.http.post(`${this.API}`, dto, { responseType: 'text' });
+  }
 }

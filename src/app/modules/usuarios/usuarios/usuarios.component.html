@@ -1,11 +1,48 @@
 <div class="page-container">
   <div class="page-header">
-    <h1>Gestión de Usuarios</h1>
-    <p>Usuarios registrados y ventas realizadas</p>
+    <div>
+      <h1>Gestión de Usuarios</h1>
+      <p>Usuarios registrados y ventas realizadas</p>
+    </div>
+    <button class="btn-nuevo" (click)="abrirFormulario()">
+      <mat-icon>person_add</mat-icon> Nuevo Usuario
+    </button>
   </div>
 
   <div *ngIf="cargando" class="loading-center">
     <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <!-- Formulario crear usuario -->
+  <div class="form-card" *ngIf="mostrandoFormulario">
+    <h3 class="form-title"><mat-icon>person_add</mat-icon> Crear Nuevo Usuario</h3>
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-grid">
+      <div class="form-group">
+        <label>Nombre completo</label>
+        <input type="text" formControlName="nombre" placeholder="Ej: Juan Pérez">
+      </div>
+      <div class="form-group">
+        <label>Usuario</label>
+        <input type="text" formControlName="username" placeholder="Ej: juanperez">
+      </div>
+      <div class="form-group">
+        <label>Contraseña (mín. 6 caracteres)</label>
+        <input type="password" formControlName="password" placeholder="••••••">
+      </div>
+      <div class="form-group">
+        <label>Rol</label>
+        <select formControlName="rol">
+          <option value="TRABAJADOR">Trabajador</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+        <button type="submit" class="btn-guardar" [disabled]="form.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Crear Usuario' }}
+        </button>
+      </div>
+    </form>
   </div>
 
   <div class="layout" *ngIf="!cargando">
@@ -35,7 +72,7 @@
 
     <!-- Detalle de ventas -->
     <div class="detalle-panel">
-      <div *ngIf="!usuarioSeleccionado" class="empty-state">
+      <div *ngIf="!usuarioSeleccionado && !mostrandoFormulario" class="empty-state">
         <mat-icon>manage_accounts</mat-icon>
         <p>Selecciona un usuario para ver sus ventas</p>
       </div>

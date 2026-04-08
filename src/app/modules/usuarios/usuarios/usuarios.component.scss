@@ -5,6 +5,9 @@
 }
 
 .page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 24px;
   h1 { font-size: 1.8rem; font-weight: 700; margin: 0; }
   p  { color: var(--text-medium); margin: 4px 0 0; }
@@ -21,6 +24,104 @@
   grid-template-columns: 340px 1fr;
   gap: 20px;
   align-items: start;
+}
+
+.btn-nuevo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  &:hover { background: var(--primary-dark); }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+// ── Formulario ────────────────────────────────────────────────────
+.form-card {
+  background: white;
+  border-radius: var(--radius, 12px);
+  border: 1px solid var(--border-color);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.form-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 20px;
+  mat-icon { color: var(--primary); }
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-medium);
+  }
+
+  input, select {
+    padding: 9px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    color: var(--text-dark);
+    &:focus { border-color: var(--primary); }
+  }
+}
+
+.form-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.btn-cancelar {
+  background: white;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-medium);
+  &:hover { border-color: var(--text-medium); }
+}
+
+.btn-guardar {
+  background: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover:not(:disabled) { background: var(--primary-dark); }
+  &:disabled { opacity: 0.6; cursor: not-allowed; }
 }
 
 // ── Panel izquierdo ───────────────────────────────────────────────
