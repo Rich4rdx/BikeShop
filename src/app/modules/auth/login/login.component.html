@@ -20,111 +20,42 @@
     </div>
 
     <mat-card class="login-card">
-      <mat-tab-group [(selectedIndex)]="activeTab" class="auth-tabs">
-        
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon>login</mat-icon>&nbsp; Iniciar Sesión
-          </ng-template>
+      <div class="tab-content">
+        <h2>Iniciar Sesión</h2>
+        <p class="subtitle">Ingresa tus credenciales para acceder al sistema</p>
 
-          <div class="tab-content">
-            <h2>Iniciar Sesión</h2>
-            <p class="subtitle">Ingresa tus credenciales para acceder al sistema</p>
+        <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <mat-form-field appearance="outline">
+            <mat-label>Usuario</mat-label>
+            <input matInput formControlName="username" placeholder="usuario" autocomplete="username">
+            <mat-icon matSuffix>person</mat-icon>
+            <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
+              El usuario es obligatorio
+            </mat-error>
+          </mat-form-field>
 
-            <form [formGroup]="loginForm" (ngSubmit)="onLogin()">
-              <mat-form-field appearance="outline">
-                <mat-label>Usuario / Email</mat-label>
-                <input matInput formControlName="username" placeholder="tu@email.com" autocomplete="username">
-                <mat-icon matSuffix>person</mat-icon>
-                <mat-error *ngIf="loginForm.get('username')?.hasError('required')">
-                  El usuario es obligatorio
-                </mat-error>
-              </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput formControlName="password"
+                   [type]="hidePassword ? 'password' : 'text'"
+                   autocomplete="current-password">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="hidePassword = !hidePassword">
+              <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+              La contraseña es obligatoria
+            </mat-error>
+          </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Contraseña</mat-label>
-                <input matInput formControlName="password"
-                       [type]="hidePassword ? 'password' : 'text'"
-                       autocomplete="current-password">
-                <button mat-icon-button matSuffix type="button"
-                        (click)="hidePassword = !hidePassword">
-                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                </button>
-                <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
-                  La contraseña es obligatoria
-                </mat-error>
-              </mat-form-field>
-
-              <button mat-raised-button class="btn-primary btn-full"
-                      type="submit" [disabled]="loading">
-                <mat-icon *ngIf="!loading">login</mat-icon>
-                <mat-spinner *ngIf="loading" diameter="20" color="accent"></mat-spinner>
-                {{ loading ? 'Ingresando...' : 'Iniciar Sesión' }}
-              </button>
-            </form>
-          </div>
-        </mat-tab>
-
-        <mat-tab>
-          <ng-template mat-tab-label>
-            <mat-icon>person_add</mat-icon>&nbsp; Registrarse
-          </ng-template>
-
-          <div class="tab-content">
-            <h2>Crear Cuenta</h2>
-            <p class="subtitle">Registra un nuevo empleado en el sistema</p>
-
-            <form [formGroup]="registroForm" (ngSubmit)="onRegistro()">
-              
-              <mat-form-field appearance="outline">
-                <mat-label>Nombre completo</mat-label>
-                <input matInput formControlName="nombre" placeholder="Tu nombre completo">
-                <mat-icon matSuffix>badge</mat-icon>
-                <mat-error *ngIf="registroForm.get('nombre')?.hasError('required')">
-                  El nombre es obligatorio
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Nombre de usuario</mat-label>
-                <input matInput formControlName="username" placeholder="empleado01" autocomplete="username">
-                <mat-icon matSuffix>person</mat-icon>
-                <mat-error *ngIf="registroForm.get('username')?.hasError('required')">
-                  El usuario es obligatorio
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Contraseña</mat-label>
-                <input matInput formControlName="password"
-                       [type]="hidePassword ? 'password' : 'text'"
-                       autocomplete="new-password">
-                <button mat-icon-button matSuffix type="button"
-                        (click)="hidePassword = !hidePassword">
-                  <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                </button>
-                <mat-error *ngIf="registroForm.get('password')?.hasError('minlength')">
-                  Mínimo 6 caracteres
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline">
-                <mat-label>Confirmar contraseña</mat-label>
-                <input matInput formControlName="confirmar"
-                       [type]="hidePassword ? 'password' : 'text'"
-                       autocomplete="new-password">
-                <mat-icon matSuffix>lock</mat-icon>
-              </mat-form-field>
-
-              <button mat-raised-button class="btn-primary btn-full"
-                      type="submit" [disabled]="loading">
-                <mat-icon *ngIf="!loading">person_add</mat-icon>
-                {{ loading ? 'Registrando...' : 'Registrar Empleado' }}
-              </button>
-            </form>
-          </div>
-        </mat-tab>
-      </mat-tab-group>
+          <button mat-raised-button class="btn-primary btn-full"
+                  type="submit" [disabled]="loading">
+            <mat-icon *ngIf="!loading">login</mat-icon>
+            <mat-spinner *ngIf="loading" diameter="20" color="accent"></mat-spinner>
+            {{ loading ? 'Ingresando...' : 'Iniciar Sesión' }}
+          </button>
+        </form>
+      </div>
     </mat-card>
 
     <p class="footer-text">Sistema de gestión para tiendas de bicicletas</p>
