@@ -23,6 +23,7 @@ export interface VentaResponse {
   cliente: string;
   documentoCliente: string;
   total: number;
+  usuarioNombre?: string;
   detalles: DetalleVentaResponse[];
 }
 
