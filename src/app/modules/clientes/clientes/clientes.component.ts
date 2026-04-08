@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ClienteResponse } from '../../../core/models/cliente.model';
 import { VentaResponse } from '../../../core/models/venta.model';
+
 import { ClienteService } from '../../../core/services/cliente.service';
 import { VentaService } from '../../../core/services/venta.service';
 
@@ -17,6 +18,7 @@ export class ClientesComponent implements OnInit {
   clientesFiltrados: ClienteResponse[] = [];
   clienteSeleccionado: ClienteResponse | null = null;
   ventasCliente: VentaResponse[] = [];
+  facturaActual: VentaResponse | null = null;
   busqueda = '';
   mostrandoFormulario = false;
   cargando = false;

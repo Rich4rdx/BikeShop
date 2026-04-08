@@ -1,0 +1,90 @@
+<div class="factura-overlay" (click)="cerrar.emit()">
+  <div class="factura-modal" (click)="$event.stopPropagation()">
+
+    <!-- Acciones (no se imprimen) -->
+    <div class="factura-actions no-print">
+      <button class="btn-imprimir" (click)="imprimir()">
+        <mat-icon>print</mat-icon> Imprimir
+      </button>
+      <button class="btn-cerrar" (click)="cerrar.emit()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- Contenido de la factura -->
+    <div class="factura-contenido" id="factura-print">
+
+      <!-- Encabezado -->
+      <div class="factura-header">
+        <div class="empresa-info">
+          <div class="empresa-logo">
+            <mat-icon>directions_bike</mat-icon>
+          </div>
+          <div>
+            <h2 class="empresa-nombre">BikeShop</h2>
+            <p class="empresa-sub">Tienda de Bicicletas</p>
+          </div>
+        </div>
+        <div class="factura-titulo">
+          <h1>FACTURA DE VENTA</h1>
+          <p class="factura-num">N° {{ venta.idVenta | number:'6.0-0' }}</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Datos factura + cliente -->
+      <div class="factura-meta">
+        <div class="meta-group">
+          <p class="meta-label">CLIENTE</p>
+          <p class="meta-value">{{ venta.cliente }}</p>
+          <p class="meta-small">Doc: {{ venta.documentoCliente }}</p>
+        </div>
+        <div class="meta-group right">
+          <p class="meta-label">FECHA</p>
+          <p class="meta-value">{{ formatFecha(venta.fecha) }}</p>
+          <p class="meta-small" *ngIf="venta.usuarioNombre">Vendedor: {{ venta.usuarioNombre }}</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Tabla de productos -->
+      <table class="factura-table">
+        <thead>
+          <tr>
+            <th>Producto</th>
+            <th class="center">Cant.</th>
+            <th class="right">Precio Unit.</th>
+            <th class="right">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of venta.detalles">
+            <td>
+              <span class="prod-nombre">{{ d.marcaBicicleta }} {{ d.modeloBicicleta }}</span>
+            </td>
+            <td class="center">{{ d.cantidad }}</td>
+            <td class="right">{{ formatPrice(d.precioUnitario) }}</td>
+            <td class="right">{{ formatPrice(d.subtotal) }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <!-- Total -->
+      <div class="factura-total">
+        <span class="total-label">TOTAL A PAGAR</span>
+        <span class="total-valor">{{ formatPrice(venta.total) }}</span>
+      </div>
+
+      <!-- Pie -->
+      <div class="factura-footer">
+        <p>¡Gracias por tu compra!</p>
+        <p class="footer-small">BikeShop — Sistema de Gestión de Tienda</p>
+      </div>
+
+    </div>
+  </div>
+</div>

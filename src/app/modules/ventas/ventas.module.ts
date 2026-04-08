@@ -10,6 +10,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { VentasComponent } from './ventas/ventas.component';
 import { AuthGuard } from '../../core/guards/auth.guard';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [VentasComponent],
@@ -25,6 +26,7 @@ import { AuthGuard } from '../../core/guards/auth.guard';
     MatInputModule,
     MatSnackBarModule,
     MatTooltipModule,
+    SharedModule,
   ]
 })
 export class VentasModule {}

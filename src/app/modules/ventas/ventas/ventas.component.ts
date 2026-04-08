@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BicicletaResponse } from '../../../core/models/bicicleta.model';
 import { ClienteResponse } from '../../../core/models/cliente.model';
-import { CartItem } from '../../../core/models/venta.model';
+import { CartItem, VentaResponse } from '../../../core/models/venta.model';
 import { BicicletaService } from '../../../core/services/bicicleta.service';
 import { ClienteService } from '../../../core/services/cliente.service';
 import { VentaService } from '../../../core/services/venta.service';
@@ -23,6 +23,7 @@ export class VentasComponent implements OnInit {
 
   carrito: CartItem[] = [];
   procesando = false;
+  facturaActual: VentaResponse | null = null;
 
   constructor(
     private bicicletaService: BicicletaService,
@@ -144,15 +145,11 @@ export class VentasComponent implements OnInit {
     this.ventaService.registrar(dto).subscribe({
       next: (venta) => {
         this.procesando = false;
+        this.facturaActual = venta;
         this.carrito = [];
         this.cliente = null;
         this.busquedaDoc = '';
         this.cargarBicicletas();
-        this.snack.open(
-          `✅ Venta #${venta.idVenta} registrada - Total: $${venta.total.toLocaleString()}`,
-          'Cerrar',
-          { duration: 5000, panelClass: ['success-snack'] }
-        );
       },
       error: (err) => {
         this.procesando = false;

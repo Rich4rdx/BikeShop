@@ -110,7 +110,7 @@
         <div class="ventas-list" *ngIf="ventasCliente.length > 0">
           <div class="venta-item" *ngFor="let v of ventasCliente">
             <div class="venta-header">
-              <span class="venta-id">Venta #{{ v.idVenta }}</span>
+              <span class="venta-id">Factura #{{ v.idVenta }}</span>
               <span class="venta-fecha">{{ formatFecha(v.fecha) }}</span>
             </div>
             <div class="venta-detalles">
@@ -118,8 +118,11 @@
                 {{ d.marcaBicicleta }} {{ d.modeloBicicleta }} x{{ d.cantidad }}
               </span>
             </div>
-            <div class="venta-total">
-              Total: <strong>{{ formatPrice(v.total) }}</strong>
+            <div class="venta-footer">
+              <span class="venta-total">Total: <strong>{{ formatPrice(v.total) }}</strong></span>
+              <button class="btn-factura" (click)="facturaActual = v">
+                <mat-icon>receipt</mat-icon> Ver Factura
+              </button>
             </div>
           </div>
         </div>
@@ -127,3 +130,10 @@
     </div>
   </div>
 </div>
+
+<!-- Factura modal -->
+<app-factura
+  *ngIf="facturaActual"
+  [venta]="facturaActual"
+  (cerrar)="facturaActual = null">
+</app-factura>

@@ -160,3 +160,10 @@
     </div>
   </div>
 </div>
+
+<!-- Factura modal -->
+<app-factura
+  *ngIf="facturaActual"
+  [venta]="facturaActual"
+  (cerrar)="facturaActual = null">
+</app-factura>

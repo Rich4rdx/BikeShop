@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { ClientesComponent } from './clientes/clientes.component';
 import { AuthGuard } from '../../core/guards/auth.guard';
+import { SharedModule } from '../../shared/shared.module';
 
 @NgModule({
   declarations: [ClientesComponent],
@@ -24,6 +25,7 @@ import { AuthGuard } from '../../core/guards/auth.guard';
     MatFormFieldModule,
     MatInputModule,
     MatSnackBarModule,
+    SharedModule,
   ]
 })
 export class ClientesModule {}

@@ -5,9 +5,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FacturaComponent } from './factura/factura.component';
 
 @NgModule({
-  declarations: [NavbarComponent],
+  declarations: [NavbarComponent, FacturaComponent],
   imports: [
     CommonModule,
     RouterModule,
@@ -15,6 +16,6 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatButtonModule,
     MatTooltipModule,
   ],
-  exports: [NavbarComponent]
+  exports: [NavbarComponent, FacturaComponent]
 })
 export class SharedModule {}
