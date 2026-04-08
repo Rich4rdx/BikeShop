@@ -117,9 +117,10 @@
   color: var(--text-dark);
 }
 
-.user-email {
+.user-rol {
   font-size: 11px;
-  color: var(--text-light);
+  color: var(--primary);
+  font-weight: 500;
 }
 
 .logout-btn {

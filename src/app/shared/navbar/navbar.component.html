@@ -13,7 +13,7 @@
   <!-- Nav Items -->
   <div class="nav-items">
     <button
-      *ngFor="let item of navItems"
+      *ngFor="let item of navItemsFiltrados"
       class="nav-btn"
       [class.active]="isActive(item.route)"
       (click)="navigate(item.route)"
@@ -26,8 +26,8 @@
   <!-- User -->
   <div class="nav-user">
     <div class="user-info">
-      <span class="user-name">{{ username }}</span>
-      <span class="user-email">ameliohernandez&#64;Gmail.com</span>
+      <span class="user-name">{{ nombre }}</span>
+      <span class="user-rol">{{ rolLabel }}</span>
     </div>
     <button mat-icon-button class="logout-btn" (click)="logout()" matTooltip="Cerrar sesión">
       <mat-icon>logout</mat-icon>

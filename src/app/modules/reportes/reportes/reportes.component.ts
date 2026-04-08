@@ -16,6 +16,7 @@ export class ReportesComponent implements OnInit {
   // Rango de fechas — por defecto el mes actual
   fechaInicio: string = this.primerDiaMes();
   fechaFin: string    = this.hoy();
+  readonly fechaMax: string = this.hoy();
 
   constructor(
     private reporteService: ReporteService,
@@ -27,6 +28,10 @@ export class ReportesComponent implements OnInit {
   }
 
   generarReporte(): void {
+    if (this.fechaInicio > this.fechaFin) {
+      this.snack.open('La fecha de inicio no puede ser mayor a la fecha fin', 'Cerrar', { duration: 3000 });
+      return;
+    }
     this.cargando = true;
     this.reporte = null;
     this.reporteService.getReporte(this.fechaInicio, this.fechaFin).subscribe({

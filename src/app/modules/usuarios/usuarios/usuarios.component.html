@@ -1,0 +1,80 @@
+<div class="page-container">
+  <div class="page-header">
+    <h1>Gestión de Usuarios</h1>
+    <p>Usuarios registrados y ventas realizadas</p>
+  </div>
+
+  <div *ngIf="cargando" class="loading-center">
+    <mat-spinner diameter="48"></mat-spinner>
+  </div>
+
+  <div class="layout" *ngIf="!cargando">
+    <!-- Lista de usuarios -->
+    <div class="usuarios-panel">
+      <div
+        *ngFor="let u of usuarios"
+        class="usuario-card"
+        [class.selected]="usuarioSeleccionado?.id === u.id"
+        (click)="seleccionarUsuario(u)">
+        <div class="usuario-avatar">
+          <mat-icon>{{ u.rol === 'ADMIN' ? 'admin_panel_settings' : 'person' }}</mat-icon>
+        </div>
+        <div class="usuario-info">
+          <span class="usuario-nombre">{{ u.nombre }}</span>
+          <span class="usuario-username">&#64;{{ u.username }}</span>
+          <span class="usuario-rol" [class.rol-admin]="u.rol === 'ADMIN'">
+            {{ u.rol === 'ADMIN' ? 'Administrador' : 'Trabajador' }}
+          </span>
+        </div>
+        <div class="usuario-ventas-count">
+          <span class="count-num">{{ u.totalVentas }}</span>
+          <span class="count-label">ventas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detalle de ventas -->
+    <div class="detalle-panel">
+      <div *ngIf="!usuarioSeleccionado" class="empty-state">
+        <mat-icon>manage_accounts</mat-icon>
+        <p>Selecciona un usuario para ver sus ventas</p>
+      </div>
+
+      <ng-container *ngIf="usuarioSeleccionado">
+        <div class="detalle-header">
+          <mat-icon>shopping_cart</mat-icon>
+          <span>Ventas de <strong>{{ usuarioSeleccionado.nombre }}</strong></span>
+        </div>
+
+        <div *ngIf="cargandoVentas" class="loading-center">
+          <mat-spinner diameter="36"></mat-spinner>
+        </div>
+
+        <div *ngIf="!cargandoVentas && ventasUsuario.length === 0" class="empty-state">
+          <mat-icon>receipt_long</mat-icon>
+          <p>Este usuario no ha registrado ventas</p>
+        </div>
+
+        <div class="ventas-list" *ngIf="!cargandoVentas && ventasUsuario.length > 0">
+          <div class="venta-item" *ngFor="let v of ventasUsuario">
+            <div class="venta-top">
+              <span class="venta-id">#{{ v.idVenta }}</span>
+              <span class="venta-total">{{ formatPrice(v.total) }}</span>
+            </div>
+            <div class="venta-meta">
+              <mat-icon class="meta-icon">person</mat-icon>
+              <span>{{ v.cliente }}</span>
+              <mat-icon class="meta-icon">calendar_today</mat-icon>
+              <span>{{ formatFecha(v.fecha) }}</span>
+            </div>
+            <div class="venta-items">
+              <span class="item-tag" *ngFor="let d of v.detalles">
+                {{ d.marca }} {{ d.modelo }} x{{ d.cantidad }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>

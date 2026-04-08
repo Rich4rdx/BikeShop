@@ -11,11 +11,11 @@
     <div class="filtro-row">
       <div class="filtro-group">
         <label>Desde</label>
-        <input type="date" [(ngModel)]="fechaInicio" class="date-input">
+        <input type="date" [(ngModel)]="fechaInicio" [max]="fechaFin" class="date-input">
       </div>
       <div class="filtro-group">
         <label>Hasta</label>
-        <input type="date" [(ngModel)]="fechaFin" class="date-input">
+        <input type="date" [(ngModel)]="fechaFin" [min]="fechaInicio" [max]="fechaMax" class="date-input">
       </div>
       <button class="btn-generar" (click)="generarReporte()" [disabled]="cargando">
         <mat-icon>search</mat-icon>
