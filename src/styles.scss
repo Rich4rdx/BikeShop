@@ -191,14 +191,42 @@ html, body {
 // PRINT — solo mostrar la factura
 // =============================================
 @media print {
-  body > app-root > * {
+  body * {
+    visibility: hidden !important;
+  }
+
+  app-factura .factura-overlay,
+  app-factura .factura-overlay * {
+    visibility: visible !important;
+  }
+
+  app-factura .no-print {
+    visibility: hidden !important;
     display: none !important;
   }
 
-  app-factura {
-    display: block !important;
+  app-factura .factura-overlay {
     position: fixed !important;
     inset: 0 !important;
-    z-index: 9999 !important;
+    background: none !important;
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding: 0 !important;
+  }
+
+  app-factura .factura-modal {
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 720px !important;
+  }
+
+  app-factura .factura-total {
+    background: #1a1a1a !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 }

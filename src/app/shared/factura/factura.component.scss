@@ -234,34 +234,9 @@
 }
 
 // ── Impresión ─────────────────────────────────────────────────────
+// (Los estilos de print globales están en styles.scss)
 @media print {
-  .factura-overlay {
-    position: static !important;
-    background: none !important;
-    padding: 0 !important;
-    display: block !important;
-  }
-
-  .factura-modal {
-    box-shadow: none !important;
-    max-height: none !important;
-    max-width: none !important;
-    border-radius: 0 !important;
-    width: 100% !important;
-    overflow: visible !important;
-  }
-
   .no-print {
     display: none !important;
-  }
-
-  .factura-contenido {
-    padding: 20px;
-  }
-
-  .factura-total {
-    background: #1a1a1a !important;
-    -webkit-print-color-adjust: exact;
-    print-color-adjust: exact;
   }
 }
